@@ -112,3 +112,7 @@ const myTree = {
 
 console.log(marina.eval(myTree)); // false
 ```
+
+License
+-------------
+MIT
