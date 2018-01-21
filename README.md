@@ -5,8 +5,6 @@ A extensible logical tree evaluatort, written on node.js.
 
 `npm install marina-tree`
 
-![Marina](https://raw.githubusercontent.com/danielmartinezvigo/marina-tree/master/logo.jpg)
-
 Usage
 -----
 
@@ -114,6 +112,10 @@ const myTree = {
 
 console.log(marina.eval(myTree)); // false
 ```
+
+Marina
+-----
+![Marina](https://raw.githubusercontent.com/danielmartinezvigo/marina-tree/master/logo.jpg)
 
 License
 -------------
