@@ -183,6 +183,73 @@ function xor (params, marina) {
   }
 }
 
+function nand (params, marina) {
+  let counter = 0;
+  let result = null;
+  if (!(params.facts instanceof Array)) {
+    let fact = params.facts;
+    if (!(params.funcs instanceof Array))
+      throw new Error(errors.notArray);
+    let i = 0;
+    while ((result === null) && i < params.funcs.length) {
+      const f = params.funcs[i];
+      if (f === 'marina') {
+        const marinilla = new Marina({funcs: marina.F});
+        const localResult = marinilla.eval(fact);
+        if (!(localResult === true || localResult === false))
+          throw new Error(`${f}: ${errors.notBoolean}`);
+        if (localResult)
+          counter += 1;
+        else
+          result = true;
+      } else {
+        if (utils.undefinedOrNull(marina.F[f]))
+          throw new Error(`${f}: ${errors.functionNotFound}`);
+        const localResult = marina.F[f](fact);
+        if (!(localResult === true || localResult === false))
+          throw new Error(`${f}: ${errors.notBoolean}`);
+        if (localResult)
+          counter += 1;
+        else
+          result = true;
+      }
+      i += 1;
+    }
+    return (result === true);
+  } else {
+    if (!(params.funcs instanceof Array))
+      throw new Error(errors.notArray);
+    if (params.funcs.length !== params.facts.length)
+      throw new Error(errors.lengths);
+    let i = 0;
+    while ((result === null) && i < params.funcs.length) {
+      const f = params.funcs[i];
+      if (f === 'marina') {
+        const marinilla = new Marina({funcs: marina.F});
+        const localResult = marinilla.eval(params.facts[i]);
+        if (!(localResult === true || localResult === false))
+          throw new Error(`${f}: ${errors.notBoolean}`);
+        if (localResult)
+          counter += 1;
+        else
+          result = true;
+      } else {
+        if (utils.undefinedOrNull(marina.F[f]))
+          throw new Error(`${f}: ${errors.functionNotFound}`);
+        const localResult = marina.F[f](params.facts[i]);
+        if (!(localResult === true || localResult === false))
+          throw new Error(`${f}: ${errors.notBoolean}`);
+        if (localResult)
+          counter += 1;
+        else
+          result = true;
+      }
+      i += 1;
+    }
+    return (result === true);
+  }
+}
+
 function not (params, marina) {
   if (utils.undefinedOrNull(params.funcs) 
     || (params.funcs instanceof Array && params.funcs.length < 1))
@@ -266,13 +333,14 @@ class Marina {
       case 'xor':
         return xor(params, this);
         break;
+      case 'nand':
+        return nand(params, this);
+        break;
       case 'not':
         return not(params, this);
         break;
       case 'none':
       case '':
-      case '.':
-      case '..':
       case '...':
       case undefined:
       case null:

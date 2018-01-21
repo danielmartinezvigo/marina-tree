@@ -250,6 +250,61 @@ describe('Test', () => {
       expect(marina.eval(tree3)).toBe(false);
     });
   });
+  // NAND -------------------
+  // NAND -------------------
+  // NAND -------------------
+  describe('Operator NAND', () => {
+    beforeAll(() => console.log('\nOperator NAND'));
+    let tree1 = {
+      funcs: ['eq', 'returnTrue'],
+      facts: [
+        {
+          first: 'a',
+          second: 'a'
+        },
+        null
+      ],
+      operator: 'nand'
+    }
+    it('should return false', () => {
+      expect(marina.eval(tree1)).toBe(false);
+    });
+    let tree2 = {
+      funcs: ['eq', 'returnTrue'],
+      facts: [
+        {
+          first: 'a',
+          second: 'b'
+        },
+        null
+      ],
+      operator: 'nand'
+    }
+    it('should return true', () => {
+      expect(marina.eval(tree2)).toBe(true);
+    });
+    let tree3 = {
+      funcs: ['eq', 'returnFalse'],
+      facts: [
+        {
+          first: 'a',
+          second: 'b'
+        },
+        null
+      ],
+      operator: 'nand'
+    }
+    it('should return true', () => {
+      expect(marina.eval(tree3)).toBe(true);
+    });
+    let tree4 = {
+      funcs: ['returnTrue', 'returnTrue', 'returnFalse', 'returnTrue'],
+      operator: 'nand'
+    }
+    it('should return true', () => {
+      expect(marina.eval(tree4)).toBe(true);
+    });
+  });
   // Marina -------------------
   // Marina -------------------
   // Marina -------------------

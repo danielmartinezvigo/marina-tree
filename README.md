@@ -60,12 +60,11 @@ Facts
 Operators
 -----
 * and
+* nand
 * or
 * xor
 * not
 * none
-* . (alias of none)
-* .. (alias of none)
 * ... (alias of none)
 
 More examples
