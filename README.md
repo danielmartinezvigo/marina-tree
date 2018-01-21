@@ -1,6 +1,8 @@
 marina-tree
 ===========
 
+[![Build Status](https://travis-ci.org/danielmartinezvigo/marina-tree.svg?branch=master)](https://travis-ci.org/danielmartinezvigo/marina-tree)
+
 A extensible logical tree evaluatort, written on node.js.
 
 `npm install marina-tree`
