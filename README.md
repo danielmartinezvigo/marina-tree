@@ -1,6 +1,8 @@
 marina-tree
 ===========
 
+![Marina](/logo.jpg)
+
 A extensible logical tree evaluatort, written on node.js.
 
 `npm install marina-tree`
