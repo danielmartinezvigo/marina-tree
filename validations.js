@@ -19,7 +19,7 @@ module.exports = {
     },
     {
       formats: {
-        operator: /^(and|or|xor|none|not|nand||\..)+$/,
+        operator: /^(and|or|xor|none|not|nand||\.\.\.)+$/,
       }
     }
   )

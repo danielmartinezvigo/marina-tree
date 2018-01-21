@@ -61,7 +61,7 @@ describe('Test', () => {
         first: 'a',
         second: 'b'
       }],
-      operator: '.'
+      operator: '...'
     }
     it('should return false', () => {
       expect(marina.eval(tree3)).toBe(false);
