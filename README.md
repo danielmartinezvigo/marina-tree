@@ -1,7 +1,7 @@
 marina-tree
 ===========
 
-![Marina](/logo.jpg)
+![Marina](https://raw.githubusercontent.com/danielmartinezvigo/marina-tree/master/logo.jpg)
 
 A extensible logical tree evaluatort, written on node.js.
 
