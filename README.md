@@ -9,7 +9,7 @@ Usage
 -----
 
 ```javascript
-const Marina = require('./marina');
+const Marina = require('marina-tree');
 
 // define my functions
 const funcs = {
