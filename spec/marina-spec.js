@@ -13,14 +13,14 @@ const someFuncs = {
   },
   lt: (params) => {
     try {
-      return params[0] < params[1];
+      return params.first < params.second;
     } catch (_) {
       return false;
     }
   },
   gt: (params) => {
     try {
-      return params[0] > params[1];
+      return params.first > params.second;
     } catch (_) {
       return false;
     }
@@ -364,6 +364,73 @@ describe('Test', () => {
     }
     it('should return true', () => {
       expect(marina.eval(tree1)).toBe(true);
+    });
+  });
+  // Fact as parameter -------------------
+  // Fact as parameter -------------------
+  // Fact as parameter -------------------
+  describe('Fact as parameter', () => {
+    beforeAll(() => console.log('\nFact as parameter'));
+    let tree1 = {
+      funcs: ['eq', 'marina'],
+      facts: [
+        {
+          first: 'a',
+          second: 'b'
+        }, // will be replace
+        {
+          funcs: ['returnTrue'],
+          operator: '...'
+        }
+      ],
+      operator: 'and'
+    }
+    it('should return true', () => {
+      expect(marina.eval(tree1, {first: 'k', second: 'k'})).toBe(true);
+    });
+    let tree2 = {
+      funcs: ['eq', 'marina', 'marina'],
+      facts: [
+        {
+          first: 'a',
+          second: 'b'
+        }, // will be replace
+        {
+          funcs: ['returnTrue'],
+          operator: '...'
+        },
+        {
+          funcs: ['gt'],
+          facts: null,
+          operator: '...'
+        }
+      ],
+      operator: 'and'
+    }
+    it('should return false', () => {
+      expect(marina.eval(tree2, {first: 1, second: 2})).toBe(false);
+    });
+    let tree3 = {
+      funcs: ['eq', 'marina', 'marina'],
+      facts: [
+        {
+          first: 'a',
+          second: 'b'
+        }, // will be replace
+        {
+          funcs: ['returnFalse'],
+          operator: '...'
+        },
+        {
+          funcs: ['eq'],
+          facts: null,
+          operator: 'and'
+        }
+      ],
+      operator: 'xor'
+    }
+    it('should return false', () => {
+      expect(marina.eval(tree3, {first: 1, second: 1})).toBe(false);
     });
   });
 });

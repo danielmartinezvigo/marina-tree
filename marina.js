@@ -25,13 +25,19 @@ function and (params, marina) {
       const f = params.funcs[i];
       if (f === 'marina') {
         const marinilla = new Marina({funcs: marina.F});
-        result = marinilla.eval(fact);
+        if (marina.fact === undefined)
+          result = marinilla.eval(fact);
+        else
+          result = marinilla.eval(fact, marina.fact);
         if (!(result === true || result === false))
           throw new Error(`${f}: ${errors.notBoolean}`);
       } else {
         if (utils.undefinedOrNull(marina.F[f]))
           throw new Error(`${f}: ${errors.functionNotFound}`);
-        result = marina.F[f](fact);
+        if (marina.fact === undefined)
+          result = marina.F[f](fact);
+        else
+          result = marina.F[f](marina.fact);
         if (!(result === true || result === false))
           throw new Error(`${f}: ${errors.notBoolean}`);
       }
@@ -48,13 +54,19 @@ function and (params, marina) {
       const f = params.funcs[i];
       if (f === 'marina') {
         const marinilla = new Marina({funcs: marina.F});
-        result = marinilla.eval(params.facts[i]);
+        if (marina.fact === undefined)
+          result = marinilla.eval(params.facts[i]);
+        else
+          result = marinilla.eval(params.facts[i],marina.fact);
         if (!(result === true || result === false))
           throw new Error(`${f}: ${errors.notBoolean}`);
       } else {
         if (utils.undefinedOrNull(marina.F[f]))
           throw new Error(`${f}: ${errors.functionNotFound}`);
-        result = marina.F[f](params.facts[i]);
+        if (marina.fact === undefined)
+          result = marina.F[f](params.facts[i]);
+        else
+          result = marina.F[f](marina.fact);
         if (!(result === true || result === false))
           throw new Error(`${f}: ${errors.notBoolean}`);
       }
@@ -75,13 +87,19 @@ function or (params, marina) {
       const f = params.funcs[i];
       if (f === 'marina') {
         const marinilla = new Marina({funcs: marina.F});
-        result = marinilla.eval(fact);
+        if (marina.fact === undefined)
+          result = marinilla.eval(fact);
+        else
+          result = marinilla.eval(fact, marina.fact);
         if (!(result === true || result === false))
           throw new Error(`${f}: ${errors.notBoolean}`);
       } else {
         if (utils.undefinedOrNull(marina.F[f]))
           throw new Error(`${f}: ${errors.functionNotFound}`);
-        result = marina.F[f](fact);
+        if (marina.fact === undefined)
+          result = marina.F[f](fact);
+        else
+        result = marina.F[f](marina.fact);
         if (!(result === true || result === false))
           throw new Error(`${f}: ${errors.notBoolean}`);
       }
@@ -98,13 +116,19 @@ function or (params, marina) {
       const f = params.funcs[i];
       if (f === 'marina') {
         const marinilla = new Marina({funcs: marina.F});
-        result = marinilla.eval(params.facts[i]);
+        if (marina.fact === undefined)
+          result = marinilla.eval(params.facts[i]);
+        else
+          result = marinilla.eval(params.facts[i],marina.fact);
         if (!(result === true || result === false))
           throw new Error(`${f}: ${errors.notBoolean}`);
       } else {
         if (utils.undefinedOrNull(marina.F[f]))
           throw new Error(`${f}: ${errors.functionNotFound}`);
-        result = marina.F[f](params.facts[i]);
+        if (marina.fact === undefined)
+          result = marina.F[f](params.facts[i]);
+        else 
+          result = marina.F[f](marina.fact);
         if (!(result === true || result === false))
           throw new Error(`${f}: ${errors.notBoolean}`);
       }
@@ -126,7 +150,11 @@ function xor (params, marina) {
       const f = params.funcs[i];
       if (f === 'marina') {
         const marinilla = new Marina({funcs: marina.F});
-        const localResult = marinilla.eval(fact);
+        let localResult;
+        if (marina.fact === undefined)
+          localResult = marinilla.eval(fact);
+        else
+          localResult = marinilla.eval(fact,marina.fact);
         if (!(localResult === true || localResult === false))
           throw new Error(`${f}: ${errors.notBoolean}`);
         if (localResult)
@@ -136,7 +164,11 @@ function xor (params, marina) {
       } else {
         if (utils.undefinedOrNull(marina.F[f]))
           throw new Error(`${f}: ${errors.functionNotFound}`);
-        const localResult = marina.F[f](fact);
+        let localResult;
+        if (marina.fact === undefined)
+          localResult = marina.F[f](fact);
+        else
+          localResult = marina.F[f](marina.fact);
         if (!(localResult === true || localResult === false))
           throw new Error(`${f}: ${errors.notBoolean}`);
         if (localResult)
@@ -146,9 +178,7 @@ function xor (params, marina) {
       }
       i += 1;
     }
-    if (result === false || counter > 1 || counter < 1)
-      return false;
-    return true;
+    return counter === 1;
   } else {
     if (!(params.funcs instanceof Array))
       throw new Error(errors.notArray);
@@ -159,7 +189,11 @@ function xor (params, marina) {
       const f = params.funcs[i];
       if (f === 'marina') {
         const marinilla = new Marina({funcs: marina.F});
-        const localResult = marinilla.eval(params.facts[i]);
+        let localResult;
+        if (marina.fact === undefined)
+          localResult = marinilla.eval(params.facts[i]);
+        else
+          localResult = marinilla.eval(params.facts[i], marina.fact);
         if (!(localResult === true || localResult === false))
           throw new Error(`${f}: ${errors.notBoolean}`);
         if (localResult)
@@ -169,7 +203,11 @@ function xor (params, marina) {
       } else {
         if (utils.undefinedOrNull(marina.F[f]))
           throw new Error(`${f}: ${errors.functionNotFound}`);
-        const localResult = marina.F[f](params.facts[i]);
+        let localResult;
+        if (marina.fact === undefined)
+          localResult = marina.F[f](params.facts[i]);
+        else
+          localResult = marina.F[f](marina.fact);
         if (!(localResult === true || localResult === false))
           throw new Error(`${f}: ${errors.notBoolean}`);
         if (localResult)
@@ -179,9 +217,7 @@ function xor (params, marina) {
       }
       i += 1;
     }
-    if (result === false || counter > 1 || counter < 1)
-      return false;
-    return true;
+    return counter === 1;
   }
 }
 
@@ -197,7 +233,11 @@ function nand (params, marina) {
       const f = params.funcs[i];
       if (f === 'marina') {
         const marinilla = new Marina({funcs: marina.F});
-        const localResult = marinilla.eval(fact);
+        let localResult;
+        if (marina.fact === undefined)
+          localResult = marinilla.eval(fact);
+        else
+          localResult = marinilla.eval(fact,marina.fact);
         if (!(localResult === true || localResult === false))
           throw new Error(`${f}: ${errors.notBoolean}`);
         if (localResult)
@@ -207,7 +247,11 @@ function nand (params, marina) {
       } else {
         if (utils.undefinedOrNull(marina.F[f]))
           throw new Error(`${f}: ${errors.functionNotFound}`);
-        const localResult = marina.F[f](fact);
+        let localResult;
+        if (marina.fact === undefined)
+          localResult = marina.F[f](fact);
+        else
+          localResult = marina.F[f](marina.fact);
         if (!(localResult === true || localResult === false))
           throw new Error(`${f}: ${errors.notBoolean}`);
         if (localResult)
@@ -228,7 +272,11 @@ function nand (params, marina) {
       const f = params.funcs[i];
       if (f === 'marina') {
         const marinilla = new Marina({funcs: marina.F});
-        const localResult = marinilla.eval(params.facts[i]);
+        let localResult;
+        if (marina.fact === undefined)
+          localResult = marinilla.eval(params.facts[i]);
+        else
+          localResult = marinilla.eval(params.facts[i], marina.fact);
         if (!(localResult === true || localResult === false))
           throw new Error(`${f}: ${errors.notBoolean}`);
         if (localResult)
@@ -238,7 +286,11 @@ function nand (params, marina) {
       } else {
         if (utils.undefinedOrNull(marina.F[f]))
           throw new Error(`${f}: ${errors.functionNotFound}`);
-        const localResult = marina.F[f](params.facts[i]);
+        let localResult;
+        if (marina.fact === undefined)
+          localResult = marina.F[f](params.facts[i]);
+        else
+          localResult = marina.F[f](marina.fact);
         if (!(localResult === true || localResult === false))
           throw new Error(`${f}: ${errors.notBoolean}`);
         if (localResult)
@@ -268,14 +320,22 @@ function not (params, marina) {
     fact = params.facts;
   if (f === 'marina') {
     const marinilla = new Marina({funcs: marina.F});
-    const result = marinilla.eval(fact);
+    let result;
+    if (marina.fact === undefined)
+      result = marinilla.eval(fact);
+    else
+      result = marinilla.eval(fact,marina.fact);
     if (!(result === true || result === false))
       throw new Error(`${f}: ${errors.notBoolean}`);
     return !(result);
   } else {
     if (utils.undefinedOrNull(marina.F[f]))
       throw new Error(`${f}: ${errors.functionNotFound}`);
-    const result = marina.F[f](fact);
+    let result;
+    if (marina.fact === undefined)
+      result = marina.F[f](fact);
+    else
+      result = marina.F[f](marina.fact);
     if (!(result === true || result === false))
       throw new Error(`${f}: ${errors.notBoolean}`);
     return !(result);
@@ -298,14 +358,22 @@ function none (params, marina) {
     fact = params.facts;
   if (f === 'marina') {
     const marinilla = new Marina({funcs: marina.F});
-    const result = marinilla.eval(fact);
+    let result;
+    if (marina.fact === undefined)
+      result = marinilla.eval(fact);
+    else
+      result = marinilla.eval(fact,marina.fact);
     if (!(result === true || result === false))
       throw new Error(`${f}: ${errors.notBoolean}`);
     return result;
   } else {
     if (utils.undefinedOrNull(marina.F[f]))
       throw new Error(`${f}: ${errors.functionNotFound}`);
-    const result = marina.F[f](fact);
+    let result;
+    if (marina.fact === undefined)
+      result = marina.F[f](fact);
+    else
+      result = marina.F[f](marina.fact);
     if (!(result === true || result === false))
       throw new Error(`${f}: ${errors.notBoolean}`);
     return result;
@@ -347,6 +415,57 @@ class Marina {
       case undefined:
       case null:
         return none(params, this);
+        break;
+      default:
+        throw new Error('unknown opeator');
+        break;
+    }
+  }
+
+  eval (params, fact) {
+    let result;
+    if (!validations.marinaEval(params, {verbose: true}))
+      throw new Error(JSON.stringify(validations.marinaEval.errors));
+    switch (params.operator) {
+      case 'and':
+        this.fact = fact;
+        result = and(params, this);
+        delete this.fact;
+        return result;
+        break;
+      case 'or':
+        this.fact = fact;
+        result = or(params, this);
+        delete this.fact;
+        return result;
+        break;
+      case 'xor':
+        this.fact = fact;
+        result = xor(params, this);
+        delete this.fact;
+        return result;
+        break;
+      case 'nand':
+        this.fact = fact;
+        result = nand(params, this);
+        delete this.fact;
+        return result;
+        break;
+      case 'not':
+        this.fact = fact;
+        result = not(params, this);
+        delete this.fact;
+        return result;
+        break;
+      case 'none':
+      case '':
+      case '...':
+      case undefined:
+      case null:
+        this.fact = fact;
+        result = none(params, this);
+        delete this.fact;
+        return result;
         break;
       default:
         throw new Error('unknown opeator');

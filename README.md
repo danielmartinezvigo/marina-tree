@@ -10,6 +10,8 @@ A extensible logical tree evaluator, written on node.js.
 Usage
 -----
 
+Using marina.eval(tree)
+
 ```javascript
 const Marina = require('marina-tree');
 
@@ -37,6 +39,7 @@ const myTree = {
     'it is not important', // the paramter for doSomethingCool
     {
       funcs: ['doSomethingCool', 'doSomethingEvil'],
+      facts: [null, null],
       operator: 'or'
     } // and the paramter for marina.eval
   ],
@@ -45,6 +48,56 @@ const myTree = {
 
 // the following will print 'true'
 console.log(marina.eval(myTree));
+```
+
+Using marina.eval(tree, fact)
+
+```javascript
+const Marina = require('marina-tree');
+
+// define my functions
+const funcs = {
+  doSomethingCool: (params) => {
+    let result = true;
+    // things are done
+    return result;
+  },
+  doSomethingEvil: (params) => {
+    let result = false;
+    // things are done
+    return result;
+  }
+}
+
+// initialize
+const marina = new Marina({funcs});
+
+// build my tree
+const myTree = {
+  funcs: ['doSomethingEvil', 'marina'],
+  facts: [
+    3.1415, // this will be replaced for theFact
+    {
+      funcs: ['doSomethingCool', 'doSomethingEvil'],
+      facts: [
+        null, // this will be replaced for theFact
+        null // this will be replaced for theFact
+      ],
+      operator: 'or'
+    } // and the paramter for marina.eval
+  ],
+  operator: 'and'
+}
+
+const theFact = {
+  data: {
+    // some data
+  },
+  moreDate: []
+}
+
+// the following will print 'true'
+console.log(marina.eval(myTree, theFact));
 ```
 
 Funcs!
@@ -82,6 +135,7 @@ const myTree = {
         'it is not important too',
         {
           funcs: ['returnTrue', 'returnTrue'],
+          facts: [null, null],
           operator: 'and'
         }
       ],
