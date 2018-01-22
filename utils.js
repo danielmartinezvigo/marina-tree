@@ -1,3 +1,4 @@
+'use strict';
 
 function undefinedOrNull (params) {
   return (params === undefined || params === null);

@@ -1,3 +1,5 @@
+'use strict';
+
 const Marina = require('../marina');
 const defaultFuncs = require('../funcs.js');
 

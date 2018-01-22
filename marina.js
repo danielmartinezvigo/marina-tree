@@ -1,3 +1,5 @@
+'use strict';
+
 const defaultfuncs = require('./funcs');
 const validations = require('./validations')
 const utils = require('./utils');
