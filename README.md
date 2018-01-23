@@ -10,7 +10,7 @@ A extensible logical tree evaluator, written on node.js.
 Usage
 -----
 
-Using marina.eval(tree)
+### Using marina.eval(tree)
 
 ```javascript
 const Marina = require('marina-tree');
@@ -50,7 +50,7 @@ const myTree = {
 console.log(marina.eval(myTree));
 ```
 
-Using marina.eval(tree, fact)
+### Using marina.eval(tree, fact)
 
 ```javascript
 const Marina = require('marina-tree');
