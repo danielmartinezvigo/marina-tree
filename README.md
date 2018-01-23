@@ -87,7 +87,7 @@ const myTree = {
       operator: 'or'
     } // and the paramter for marina.eval
   ],
-  operator: 'and'
+  operator: 'or'
 }
 
 const theFact = {
