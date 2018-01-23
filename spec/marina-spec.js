@@ -389,7 +389,7 @@ describe('Test', () => {
       expect(marina.eval(tree1, {first: 'k', second: 'k'})).toBe(true);
     });
     let tree2 = {
-      funcs: ['eq', 'marina', 'marina'],
+      funcs: ['lt', 'marina', 'marina'],
       facts: [
         {
           first: 'a',
@@ -400,9 +400,15 @@ describe('Test', () => {
           operator: '...'
         },
         {
-          funcs: ['gt'],
-          facts: null,
-          operator: '...'
+          funcs: ['gt', 'marina'],
+          facts: [
+            null, // will be replace
+            {
+              funcs: ['gt'],
+              facts: 'Club Nacional de Football'
+            }
+          ],
+          operator: 'or'
         }
       ],
       operator: 'and'

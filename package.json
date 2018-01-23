@@ -1,6 +1,6 @@
 {
   "name": "marina-tree",
-  "version": "1.0.6",
+  "version": "1.2.0",
   "description": "A extensible logical tree evaluator, written on node.js.",
   "main": "marina.js",
   "scripts": {

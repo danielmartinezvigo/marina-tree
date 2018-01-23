@@ -78,10 +78,11 @@ const myTree = {
   facts: [
     3.1415, // this will be replaced for theFact
     {
-      funcs: ['doSomethingCool', 'doSomethingEvil'],
+      funcs: ['doSomethingCool', 'doSomethingEvil', 'returnTrue'],
       facts: [
-        null, // this will be replaced for theFact
-        null // this will be replaced for theFact
+        'John Doe', // this will be replaced for theFact
+        [2,3,5,7,11,13,17], // this will be replaced for theFact
+        'Club Nacional de Football'
       ],
       operator: 'or'
     } // and the paramter for marina.eval
