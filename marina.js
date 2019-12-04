@@ -27,6 +27,8 @@ function and (params, marina) {
         const marinilla = new Marina({funcs: marina.F});
         if (marina.fact === undefined)
           result = marinilla.eval(fact);
+        else if (marina.fact instanceof Array && marina.fact.length === params.funcs.length)
+          result = marinilla.eval(fact, marina.fact[i]);
         else
           result = marinilla.eval(fact, marina.fact);
         if (!(result === true || result === false))
@@ -36,6 +38,8 @@ function and (params, marina) {
           throw new Error(`${f}: ${errors.functionNotFound}`);
         if (marina.fact === undefined)
           result = marina.F[f](fact);
+        else if (marina.fact instanceof Array && marina.fact.length === params.funcs.length)
+          result = marina.F[f](marina.fact[i]);
         else
           result = marina.F[f](marina.fact);
         if (!(result === true || result === false))
@@ -56,6 +60,8 @@ function and (params, marina) {
         const marinilla = new Marina({funcs: marina.F});
         if (marina.fact === undefined)
           result = marinilla.eval(params.facts[i]);
+        else if (marina.fact instanceof Array && marina.fact.length === params.funcs.length)
+          result = marinilla.eval(params.facts[i],marina.fact[i]);
         else
           result = marinilla.eval(params.facts[i],marina.fact);
         if (!(result === true || result === false))
@@ -65,6 +71,8 @@ function and (params, marina) {
           throw new Error(`${f}: ${errors.functionNotFound}`);
         if (marina.fact === undefined)
           result = marina.F[f](params.facts[i]);
+        else if (marina.fact instanceof Array && marina.fact.length === params.funcs.length)
+          result = marina.F[f](marina.fact[i]);
         else
           result = marina.F[f](marina.fact);
         if (!(result === true || result === false))
@@ -89,6 +97,8 @@ function or (params, marina) {
         const marinilla = new Marina({funcs: marina.F});
         if (marina.fact === undefined)
           result = marinilla.eval(fact);
+        else if (marina.fact instanceof Array && marina.fact.length === params.funcs.length)
+          result = marinilla.eval(fact, marina.fact[i]);
         else
           result = marinilla.eval(fact, marina.fact);
         if (!(result === true || result === false))
@@ -98,8 +108,10 @@ function or (params, marina) {
           throw new Error(`${f}: ${errors.functionNotFound}`);
         if (marina.fact === undefined)
           result = marina.F[f](fact);
+        else if (marina.fact instanceof Array && marina.fact.length === params.funcs.length)
+          result = marina.F[f](marina.fact[i]);
         else
-        result = marina.F[f](marina.fact);
+          result = marina.F[f](marina.fact);
         if (!(result === true || result === false))
           throw new Error(`${f}: ${errors.notBoolean}`);
       }
@@ -118,6 +130,8 @@ function or (params, marina) {
         const marinilla = new Marina({funcs: marina.F});
         if (marina.fact === undefined)
           result = marinilla.eval(params.facts[i]);
+        else if (marina.fact instanceof Array && marina.fact.length === params.funcs.length)
+          result = marinilla.eval(params.facts[i],marina.fact[i]);
         else
           result = marinilla.eval(params.facts[i],marina.fact);
         if (!(result === true || result === false))
@@ -127,6 +141,8 @@ function or (params, marina) {
           throw new Error(`${f}: ${errors.functionNotFound}`);
         if (marina.fact === undefined)
           result = marina.F[f](params.facts[i]);
+        else if (marina.fact instanceof Array && marina.fact.length === params.funcs.length)
+          result = marina.F[f](marina.fact[i]);
         else 
           result = marina.F[f](marina.fact);
         if (!(result === true || result === false))
@@ -323,6 +339,8 @@ function not (params, marina) {
     let result;
     if (marina.fact === undefined)
       result = marinilla.eval(fact);
+    else if (marina.fact instanceof Array)
+      result = marinilla.eval(fact,marina.fact[0]);
     else
       result = marinilla.eval(fact,marina.fact);
     if (!(result === true || result === false))
@@ -334,6 +352,8 @@ function not (params, marina) {
     let result;
     if (marina.fact === undefined)
       result = marina.F[f](fact);
+    else if (marina.fact instanceof Array)
+      result = marina.F[f](marina.fact[0]);
     else
       result = marina.F[f](marina.fact);
     if (!(result === true || result === false))
@@ -361,6 +381,8 @@ function none (params, marina) {
     let result;
     if (marina.fact === undefined)
       result = marinilla.eval(fact);
+    else if (marina.fact instanceof Array)
+      result = marinilla.eval(fact, marina.fact[0]);
     else
       result = marinilla.eval(fact,marina.fact);
     if (!(result === true || result === false))
@@ -372,6 +394,8 @@ function none (params, marina) {
     let result;
     if (marina.fact === undefined)
       result = marina.F[f](fact);
+    else if (marina.fact instanceof Array)
+      result = marina.F[f](marina.fact[0]);
     else
       result = marina.F[f](marina.fact);
     if (!(result === true || result === false))

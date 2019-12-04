@@ -439,4 +439,74 @@ describe('Test', () => {
       expect(marina.eval(tree3, {first: 1, second: 1})).toBe(false);
     });
   });
+  // Fact as parameter (TREE) -------------------
+  // Fact as parameter (TREE) -------------------
+  // Fact as parameter (TREE) -------------------
+  describe('Fact as parameter (TREE)', () => {
+    beforeAll(() => console.log('\nFact as parameter (TREE)'));
+    let tree1 = {
+      funcs: ['eq', 'marina'],
+      facts: [
+        {
+          first: 'a',
+          second: 'b'
+        }, // will be replace
+        {
+          funcs: ['returnFalse'],
+          operator: '...'
+        }
+      ],
+      operator: 'or'
+    }
+    it('should return true', () => {
+      expect(marina.eval(tree1, [{ first: 'j', second: 'j' }, { first: 'k', second: 'j' }])).toBe(true);
+    });
+    let tree2 = {
+      funcs: ['eq', 'marina', 'marina'],
+      facts: [
+        null,
+        {
+          funcs: ['returnTrue'],
+          operator: '...'
+        },
+        {
+          funcs: ['gt', 'marina'],
+          facts: [
+            null,
+            {
+              funcs: ['lt'],
+              facts: 'Club Nacional de Football'
+            }
+          ],
+          operator: 'and'
+        }
+      ],
+      operator: 'and'
+    }
+    it('should return false', () => {
+      const facts = [
+        {
+          first: 2,
+          second: 2,
+        },
+        {
+          first: 1,
+          second: 2,
+        },
+        [
+          {
+            first: 4,
+            second: 3,
+          },
+          [
+            {
+              first: 1,
+              second: 3,
+            },
+          ],
+        ],
+      ];
+      expect(marina.eval(tree2, facts)).toBe(true);
+    });
+  });
 });
