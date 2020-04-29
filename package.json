@@ -1,0 +1,32 @@
+{
+  "name": "marina-tree",
+  "version": "3.0.0",
+  "description": "A extensible logical tree evaluator, written on node.js.",
+  "main": "marina.js",
+  "scripts": {
+    "test": "jasmine"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/danielmartinezvigo/marina-tree.git"
+  },
+  "keywords": [
+    "logical-tree",
+    "tree",
+    "evaluator",
+    "and-or-not",
+    "rules"
+  ],
+  "author": "danielmartinezvigo",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/danielmartinezvigo/marina-tree/issues"
+  },
+  "homepage": "https://github.com/danielmartinezvigo/marina-tree#readme",
+  "dependencies": {
+    "is-my-json-valid": "^2.17.1"
+  },
+  "devDependencies": {
+    "jasmine": "^2.9.0"
+  }
+}
