@@ -11,7 +11,9 @@ const errors = {
   lengths: 'params.funcs.length !== params.facts.length',
   mustBeObject: 'must be object',
   mustBeString: 'must be string',
-  mustBeDefined: 'must be defined'
+  mustBeDefined: 'must be defined',
+  invalidTree: 'invalid tree',
+  invalidnestedArgs: 'invalid nested args',
 }
 
 function and (params, marina) {
@@ -25,23 +27,13 @@ function and (params, marina) {
       const f = params.funcs[i];
       if (f === marina.wildcard) {
         const marinilla = new Marina({funcs: marina.F}, marina.wildcard);
-        if (marina.fact === undefined)
-          result = marinilla.eval(fact);
-        else if (marina.fact instanceof Array && marina.fact.length === params.funcs.length)
-          result = marinilla.eval(fact, marina.fact[i]);
-        else
-          result = marinilla.eval(fact, marina.fact);
+        result = marinilla.eval(fact, marina.fact, marina.nestedArgs ? marina.nestedArgs[i] : undefined);
         if (!(result === true || result === false))
           throw new Error(`${f}: ${errors.notBoolean}`);
       } else {
         if (utils.undefinedOrNull(marina.F[f]))
           throw new Error(`${f}: ${errors.functionNotFound}`);
-        if (marina.fact === undefined)
-          result = marina.F[f](fact);
-        else if (marina.fact instanceof Array && marina.fact.length === params.funcs.length)
-          result = marina.F[f](marina.fact[i]);
-        else
-          result = marina.F[f](marina.fact);
+        result = marina.F[f](marina.fact === undefined ? fact : marina.fact, marina.nestedArgs ? marina.nestedArgs[i] : undefined);
         if (!(result === true || result === false))
           throw new Error(`${f}: ${errors.notBoolean}`);
       }
@@ -58,23 +50,13 @@ function and (params, marina) {
       const f = params.funcs[i];
       if (f === marina.wildcard) {
         const marinilla = new Marina({funcs: marina.F}, marina.wildcard);
-        if (marina.fact === undefined)
-          result = marinilla.eval(params.facts[i]);
-        else if (marina.fact instanceof Array && marina.fact.length === params.funcs.length)
-          result = marinilla.eval(params.facts[i],marina.fact[i]);
-        else
-          result = marinilla.eval(params.facts[i],marina.fact);
+        result = marinilla.eval(params.facts[i], marina.fact, marina.nestedArgs ? marina.nestedArgs[i] : undefined);
         if (!(result === true || result === false))
           throw new Error(`${f}: ${errors.notBoolean}`);
       } else {
         if (utils.undefinedOrNull(marina.F[f]))
           throw new Error(`${f}: ${errors.functionNotFound}`);
-        if (marina.fact === undefined)
-          result = marina.F[f](params.facts[i]);
-        else if (marina.fact instanceof Array && marina.fact.length === params.funcs.length)
-          result = marina.F[f](marina.fact[i]);
-        else
-          result = marina.F[f](marina.fact);
+        result = marina.F[f](marina.fact === undefined ? params.facts[i] : marina.fact, marina.nestedArgs ? marina.nestedArgs[i] : undefined);
         if (!(result === true || result === false))
           throw new Error(`${f}: ${errors.notBoolean}`);
       }
@@ -95,23 +77,13 @@ function or (params, marina) {
       const f = params.funcs[i];
       if (f === marina.wildcard) {
         const marinilla = new Marina({funcs: marina.F}, marina.wildcard);
-        if (marina.fact === undefined)
-          result = marinilla.eval(fact);
-        else if (marina.fact instanceof Array && marina.fact.length === params.funcs.length)
-          result = marinilla.eval(fact, marina.fact[i]);
-        else
-          result = marinilla.eval(fact, marina.fact);
+        result = marinilla.eval(fact, marina.fact, marina.nestedArgs ? marina.nestedArgs[i] : undefined);
         if (!(result === true || result === false))
           throw new Error(`${f}: ${errors.notBoolean}`);
       } else {
         if (utils.undefinedOrNull(marina.F[f]))
           throw new Error(`${f}: ${errors.functionNotFound}`);
-        if (marina.fact === undefined)
-          result = marina.F[f](fact);
-        else if (marina.fact instanceof Array && marina.fact.length === params.funcs.length)
-          result = marina.F[f](marina.fact[i]);
-        else
-          result = marina.F[f](marina.fact);
+        result = marina.F[f](marina.fact === undefined ? fact : marina.fact, marina.nestedArgs ? marina.nestedArgs[i] : undefined);
         if (!(result === true || result === false))
           throw new Error(`${f}: ${errors.notBoolean}`);
       }
@@ -128,23 +100,13 @@ function or (params, marina) {
       const f = params.funcs[i];
       if (f === marina.wildcard) {
         const marinilla = new Marina({funcs: marina.F}, marina.wildcard);
-        if (marina.fact === undefined)
-          result = marinilla.eval(params.facts[i]);
-        else if (marina.fact instanceof Array && marina.fact.length === params.funcs.length)
-          result = marinilla.eval(params.facts[i],marina.fact[i]);
-        else
-          result = marinilla.eval(params.facts[i],marina.fact);
+        result = marinilla.eval(params.facts[i], marina.fact, marina.nestedArgs ? marina.nestedArgs[i] : undefined);
         if (!(result === true || result === false))
           throw new Error(`${f}: ${errors.notBoolean}`);
       } else {
         if (utils.undefinedOrNull(marina.F[f]))
           throw new Error(`${f}: ${errors.functionNotFound}`);
-        if (marina.fact === undefined)
-          result = marina.F[f](params.facts[i]);
-        else if (marina.fact instanceof Array && marina.fact.length === params.funcs.length)
-          result = marina.F[f](marina.fact[i]);
-        else 
-          result = marina.F[f](marina.fact);
+        result = marina.F[f](marina.fact === undefined ? params.facts[i] : marina.fact, marina.nestedArgs ? marina.nestedArgs[i] : undefined);
         if (!(result === true || result === false))
           throw new Error(`${f}: ${errors.notBoolean}`);
       }
@@ -166,13 +128,7 @@ function xor (params, marina) {
       const f = params.funcs[i];
       if (f === marina.wildcard) {
         const marinilla = new Marina({funcs: marina.F}, marina.wildcard);
-        let localResult;
-        if (marina.fact === undefined)
-          localResult = marinilla.eval(fact);
-        else if (marina.fact instanceof Array && marina.fact.length === params.funcs.length)
-          localResult = marinilla.eval(params.fact,marina.fact[i]);
-        else
-          localResult = marinilla.eval(fact,marina.fact);
+        const localResult = marinilla.eval(fact, params.fact, marina.nestedArgs ? marina.nestedArgs[i] : undefined);
         if (!(localResult === true || localResult === false))
           throw new Error(`${f}: ${errors.notBoolean}`);
         if (localResult)
@@ -182,13 +138,7 @@ function xor (params, marina) {
       } else {
         if (utils.undefinedOrNull(marina.F[f]))
           throw new Error(`${f}: ${errors.functionNotFound}`);
-        let localResult;
-        if (marina.fact === undefined)
-          localResult = marina.F[f](fact);
-        else if (marina.fact instanceof Array && marina.fact.length === params.funcs.length)
-          localResult = marina.F[f](marina.fact[i]);
-        else
-          localResult = marina.F[f](marina.fact);
+        const localResult = marina.F[f](marina.fact === undefined ? fact : marina.fact, marina.nestedArgs ? marina.nestedArgs[i] : undefined);
         if (!(localResult === true || localResult === false))
           throw new Error(`${f}: ${errors.notBoolean}`);
         if (localResult)
@@ -209,13 +159,7 @@ function xor (params, marina) {
       const f = params.funcs[i];
       if (f === marina.wildcard) {
         const marinilla = new Marina({funcs: marina.F}, marina.wildcard);
-        let localResult;
-        if (marina.fact === undefined)
-          localResult = marinilla.eval(params.facts[i]);
-        else if (marina.fact instanceof Array && marina.fact.length === params.funcs.length)
-          localResult = marinilla.eval(params.facts[i],marina.fact[i]);
-        else
-          localResult = marinilla.eval(params.facts[i], marina.fact);
+        const localResult = marinilla.eval(params.facts[i], marina.fact, marina.nestedArgs ? marina.nestedArgs[i] : undefined);
         if (!(localResult === true || localResult === false))
           throw new Error(`${f}: ${errors.notBoolean}`);
         if (localResult)
@@ -225,13 +169,7 @@ function xor (params, marina) {
       } else {
         if (utils.undefinedOrNull(marina.F[f]))
           throw new Error(`${f}: ${errors.functionNotFound}`);
-        let localResult;
-        if (marina.fact === undefined)
-          localResult = marina.F[f](params.facts[i]);
-        else if (marina.fact instanceof Array && marina.fact.length === params.funcs.length)
-          localResult = marina.F[f](marina.fact[i]);
-        else
-          localResult = marina.F[f](marina.fact);
+        const localResult = marina.F[f](marina.fact === undefined ? params.facts[i] : marina.fact, marina.nestedArgs ? marina.nestedArgs[i] : undefined);
         if (!(localResult === true || localResult === false))
           throw new Error(`${f}: ${errors.notBoolean}`);
         if (localResult)
@@ -257,11 +195,7 @@ function nand (params, marina) {
       const f = params.funcs[i];
       if (f === marina.wildcard) {
         const marinilla = new Marina({funcs: marina.F}, marina.wildcard);
-        let localResult;
-        if (marina.fact === undefined)
-          localResult = marinilla.eval(fact);
-        else
-          localResult = marinilla.eval(fact,marina.fact);
+        const localResult = marinilla.eval(fact, params.fact, marina.nestedArgs ? marina.nestedArgs[i] : undefined);
         if (!(localResult === true || localResult === false))
           throw new Error(`${f}: ${errors.notBoolean}`);
         if (localResult)
@@ -271,11 +205,7 @@ function nand (params, marina) {
       } else {
         if (utils.undefinedOrNull(marina.F[f]))
           throw new Error(`${f}: ${errors.functionNotFound}`);
-        let localResult;
-        if (marina.fact === undefined)
-          localResult = marina.F[f](fact);
-        else
-          localResult = marina.F[f](marina.fact);
+        const localResult = marina.F[f](marina.fact === undefined ? fact : marina.fact, marina.nestedArgs ? marina.nestedArgs[i] : undefined);
         if (!(localResult === true || localResult === false))
           throw new Error(`${f}: ${errors.notBoolean}`);
         if (localResult)
@@ -296,11 +226,7 @@ function nand (params, marina) {
       const f = params.funcs[i];
       if (f === marina.wildcard) {
         const marinilla = new Marina({funcs: marina.F}, marina.wildcard);
-        let localResult;
-        if (marina.fact === undefined)
-          localResult = marinilla.eval(params.facts[i]);
-        else
-          localResult = marinilla.eval(params.facts[i], marina.fact);
+        const localResult = marinilla.eval(params.facts[i], marina.fact, marina.nestedArgs ? marina.nestedArgs[i] : undefined);
         if (!(localResult === true || localResult === false))
           throw new Error(`${f}: ${errors.notBoolean}`);
         if (localResult)
@@ -310,11 +236,7 @@ function nand (params, marina) {
       } else {
         if (utils.undefinedOrNull(marina.F[f]))
           throw new Error(`${f}: ${errors.functionNotFound}`);
-        let localResult;
-        if (marina.fact === undefined)
-          localResult = marina.F[f](params.facts[i]);
-        else
-          localResult = marina.F[f](marina.fact);
+        const localResult = marina.F[f](marina.fact === undefined ? params.facts[i] : marina.fact, marina.nestedArgs ? marina.nestedArgs[i] : undefined);
         if (!(localResult === true || localResult === false))
           throw new Error(`${f}: ${errors.notBoolean}`);
         if (localResult)
@@ -344,26 +266,14 @@ function not (params, marina) {
     fact = params.facts;
   if (f === marina.wildcard) {
     const marinilla = new Marina({funcs: marina.F}, marina.wildcard);
-    let result;
-    if (marina.fact === undefined)
-      result = marinilla.eval(fact);
-    else if (marina.fact instanceof Array)
-      result = marinilla.eval(fact,marina.fact[0]);
-    else
-      result = marinilla.eval(fact,marina.fact);
+    const result = marinilla.eval(fact, marina.fact, marina.nestedArgs ? marina.nestedArgs[0] : undefined);
     if (!(result === true || result === false))
       throw new Error(`${f}: ${errors.notBoolean}`);
     return !(result);
   } else {
     if (utils.undefinedOrNull(marina.F[f]))
       throw new Error(`${f}: ${errors.functionNotFound}`);
-    let result;
-    if (marina.fact === undefined)
-      result = marina.F[f](fact);
-    else if (marina.fact instanceof Array)
-      result = marina.F[f](marina.fact[0]);
-    else
-      result = marina.F[f](marina.fact);
+    const result = marina.F[f](marina.fact === undefined ? fact : marina.fact, marina.nestedArgs ? marina.nestedArgs[0] : undefined);
     if (!(result === true || result === false))
       throw new Error(`${f}: ${errors.notBoolean}`);
     return !(result);
@@ -386,26 +296,14 @@ function none (params, marina) {
     fact = params.facts;
   if (f === marina.wildcard) {
     const marinilla = new Marina({funcs: marina.F}, marina.wildcard);
-    let result;
-    if (marina.fact === undefined)
-      result = marinilla.eval(fact);
-    else if (marina.fact instanceof Array)
-      result = marinilla.eval(fact, marina.fact[0]);
-    else
-      result = marinilla.eval(fact,marina.fact);
+    const result = marinilla.eval(fact, marina.fact, marina.nestedArgs ? marina.nestedArgs[0] : undefined);
     if (!(result === true || result === false))
       throw new Error(`${f}: ${errors.notBoolean}`);
     return result;
   } else {
     if (utils.undefinedOrNull(marina.F[f]))
       throw new Error(`${f}: ${errors.functionNotFound}`);
-    let result;
-    if (marina.fact === undefined)
-      result = marina.F[f](fact);
-    else if (marina.fact instanceof Array)
-      result = marina.F[f](marina.fact[0]);
-    else
-      result = marina.F[f](marina.fact);
+    const result = marina.F[f](marina.fact === undefined ? fact : marina.fact, marina.nestedArgs ? marina.nestedArgs[0] : undefined);
     if (!(result === true || result === false))
       throw new Error(`${f}: ${errors.notBoolean}`);
     return result;
@@ -458,32 +356,28 @@ class Marina {
     const params = tree
     if (!validations.marinaEval(params, {verbose: true}))
       throw new Error(JSON.stringify(validations.marinaEval.errors));
+    if (validations.isNotValidTree(tree, this.wildcard)) {
+      throw new Error(JSON.stringify(errors.invalidTree)); 
+    }
     switch (params.operator) {
       case 'and':
         return and(params, this);
-        break;
       case 'or':
         return or(params, this);
-        break;
       case 'xor':
         return xor(params, this);
-        break;
       case 'nand':
         return nand(params, this);
-        break;
       case 'not':
         return not(params, this);
-        break;
       case 'none':
       case '':
       case '...':
       case undefined:
       case null:
         return none(params, this);
-        break;
       default:
         throw new Error('unknown opeator');
-        break;
     }
   }
 
@@ -492,44 +386,43 @@ class Marina {
    * @param {string[]} tree.funcs
    * @param {Array=} tree.facts
    * @param {('and'|'or'|'xor'|'nand'|'not'|'none'|'...')} tree.operator
-   * @param {(Array|Object)} fact
+   * @param {any} fact
    * @return {boolean}
    */
-  eval (params, fact) {
+  eval (tree, fact) {
+    const params = tree;
     let result;
     if (!validations.marinaEval(params, {verbose: true}))
       throw new Error(JSON.stringify(validations.marinaEval.errors));
+    if (validations.isNotValidTree(tree, this.wildcard)) {
+      throw new Error(JSON.stringify(errors.invalidTree)); 
+    }
     switch (params.operator) {
       case 'and':
         this.fact = fact;
         result = and(params, this);
         delete this.fact;
         return result;
-        break;
       case 'or':
         this.fact = fact;
         result = or(params, this);
         delete this.fact;
         return result;
-        break;
       case 'xor':
         this.fact = fact;
         result = xor(params, this);
         delete this.fact;
         return result;
-        break;
       case 'nand':
         this.fact = fact;
         result = nand(params, this);
         delete this.fact;
         return result;
-        break;
       case 'not':
         this.fact = fact;
         result = not(params, this);
         delete this.fact;
         return result;
-        break;
       case 'none':
       case '':
       case '...':
@@ -539,10 +432,74 @@ class Marina {
         result = none(params, this);
         delete this.fact;
         return result;
-        break;
       default:
         throw new Error('unknown opeator');
-        break;
+    }
+  }
+
+  /**
+   * @param {Object} tree
+   * @param {string[]} tree.funcs
+   * @param {Array=} tree.facts
+   * @param {('and'|'or'|'xor'|'nand'|'not'|'none'|'...')} tree.operator
+   * @param {Object} fact
+   * @param {Array} nestedArgs
+   * @return {boolean}
+   */
+  eval (tree, fact, nestedArgs) {
+    const params = tree;
+    let result;
+    if (!validations.marinaEval(params, {verbose: true}))
+      throw new Error(JSON.stringify(validations.marinaEval.errors));
+    if (validations.isNotValidTree(tree, this.wildcard)) {
+      throw new Error(JSON.stringify(errors.invalidTree)); 
+    }
+    if (validations.isNotValidnestedArgs(tree, this.wildcard, nestedArgs)) {
+      throw new Error(JSON.stringify(errors.invalidnestedArgs)); 
+    }
+    switch (params.operator) {
+      case 'and':
+        this.fact = fact;
+        this.nestedArgs = nestedArgs;
+        result = and(params, this);
+        delete this.fact;
+        return result;
+      case 'or':
+        this.fact = fact;
+        this.nestedArgs = nestedArgs;
+        result = or(params, this);
+        delete this.fact;
+        return result;
+      case 'xor':
+        this.fact = fact;
+        this.nestedArgs = nestedArgs;
+        result = xor(params, this);
+        delete this.fact;
+        return result;
+      case 'nand':
+        this.fact = fact;
+        this.nestedArgs = nestedArgs;
+        result = nand(params, this);
+        delete this.fact;
+        return result;
+      case 'not':
+        this.fact = fact;
+        this.nestedArgs = nestedArgs;
+        result = not(params, this);
+        delete this.fact;
+        return result;
+      case 'none':
+      case '':
+      case '...':
+      case undefined:
+      case null:
+        this.fact = fact;
+        this.nestedArgs = nestedArgs;
+        result = none(params, this);
+        delete this.fact;
+        return result;
+      default:
+        throw new Error('unknown opeator');
     }
   }
 }

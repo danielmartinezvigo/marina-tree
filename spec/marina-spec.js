@@ -4,22 +4,31 @@ const Marina = require('../marina');
 const defaultFuncs = require('../funcs.js');
 
 const someFuncs = {
-  eq: (params) => {
+  eq: (params, nestedParams) => {
     try {
+      if (nestedParams) {
+        return nestedParams.first === nestedParams.second;
+      }
       return params.first === params.second;
     } catch (_) {
       return false;
     }
   },
-  lt: (params) => {
+  lt: (params, nestedParams) => {
     try {
+      if (nestedParams) {
+        return nestedParams.first < nestedParams.second;
+      }
       return params.first < params.second;
     } catch (_) {
       return false;
     }
   },
-  gt: (params) => {
+  gt: (params, nestedParams) => {
     try {
+      if (nestedParams) {
+        return nestedParams.first > nestedParams.second;
+      }
       return params.first > params.second;
     } catch (_) {
       return false;
@@ -340,7 +349,7 @@ describe('Test', () => {
       operator: 'and'
     }
     it('should return true', () => {
-      expect(marina.eval(tree1)).toBe(true);
+      expect(marina.eval(tree2)).toBe(true);
     });
     let tree3 = {
       funcs: ['marina', 'marina'],
@@ -363,7 +372,7 @@ describe('Test', () => {
       operator: 'xor'
     }
     it('should return true', () => {
-      expect(marina.eval(tree1)).toBe(true);
+      expect(marina.eval(tree3)).toBe(true);
     });
   });
   // Fact as parameter -------------------
@@ -439,11 +448,11 @@ describe('Test', () => {
       expect(marina.eval(tree3, {first: 1, second: 1})).toBe(false);
     });
   });
-  // Fact as parameter (TREE) -------------------
-  // Fact as parameter (TREE) -------------------
-  // Fact as parameter (TREE) -------------------
-  describe('Fact as parameter (TREE)', () => {
-    beforeAll(() => console.log('\nFact as parameter (TREE)'));
+  // Fact as parameter, nested fact only -------------------
+  // Fact as parameter, nested fact only -------------------
+  // Fact as parameter, nested fact only -------------------
+  describe('Fact as parameter, nested fact only', () => {
+    beforeAll(() => console.log('\nFact as parameter, nested fact only'));
     let tree1 = {
       funcs: ['eq', 'marina'],
       facts: [
@@ -459,10 +468,11 @@ describe('Test', () => {
       operator: 'or'
     }
     it('should return true', () => {
-      expect(marina.eval(tree1, [{ first: 'j', second: 'j' }, { first: 'k', second: 'j' }])).toBe(true);
+      expect(marina.eval(tree1, 1, [{ first: 'j', second: 'j' }, [{ first: 'k', second: 'j' }]])).toBe(true);
     });
     let tree2 = {
       funcs: ['eq', 'marina', 'marina'],
+      // funcs: ['eq', 'marina'],
       facts: [
         null,
         {
@@ -474,8 +484,9 @@ describe('Test', () => {
           facts: [
             null,
             {
-              funcs: ['lt'],
-              facts: 'Club Nacional de Football'
+              funcs: ['lt', 'gt'],
+              facts: 'Club Nacional de Football',
+              operator: 'nand'
             }
           ],
           operator: 'and'
@@ -489,10 +500,10 @@ describe('Test', () => {
           first: 2,
           second: 2,
         },
-        {
+        [{
           first: 1,
           second: 2,
-        },
+        }],
         [
           {
             first: 4,
@@ -503,10 +514,14 @@ describe('Test', () => {
               first: 1,
               second: 3,
             },
+            {
+              first: 1,
+              second: 3,
+            },
           ],
         ],
       ];
-      expect(marina.eval(tree2, facts)).toBe(true);
+      expect(marina.eval(tree2, 2, facts)).toBe(true);
     });
   });
 });

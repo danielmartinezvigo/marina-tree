@@ -2,19 +2,19 @@ marina-tree
 ===========
 
 [![Build Status](https://travis-ci.org/danielmartinezvigo/marina-tree.svg?branch=master)](https://travis-ci.org/danielmartinezvigo/marina-tree)
+[![Coverage Status](https://coveralls.io/repos/github/danielmartinezvigo/marina-tree/badge.svg?branch=master)](https://coveralls.io/github/danielmartinezvigo/marina-tree?branch=master)
 
 An extensible logical tree evaluator.
 
 `npm i marina-tree`
 
-Usage
------
+# Usage
 
-### Single Fact
+## Single Fact
 
 The same fact will be evaluated in all functions in the tree.
 
-![Marina](https://raw.githubusercontent.com/danielmartinezvigo/marina-tree/master/example1.png)
+![](https://raw.githubusercontent.com/danielmartinezvigo/marina-tree/master/marina-tree-1.svg)
 
 ```javascript
 const Marina = require('marina-tree');
@@ -54,7 +54,7 @@ console.log(marina.eval(myTree, {})); // false
 console.log(marina.eval(myTree, [])); // true
 ```
 
-![Marina](https://raw.githubusercontent.com/danielmartinezvigo/marina-tree/master/example2.png)
+![](https://raw.githubusercontent.com/danielmartinezvigo/marina-tree/master/marina-tree-2.svg)
 
 ```javascript
 const Marina = require('marina-tree');
@@ -115,25 +115,25 @@ console.log(marina.eval(myTree, 101));  // false
 console.log(marina.eval(myTree, (() => console.log('is a function'))));  // true
 ```
 
-### Nested Fact
+## Single Fact + Nested Args
 
-Each function will receive a specific fact as parameter.
+Each function will receive the same fact + a specific argument.
 
-![Marina](https://raw.githubusercontent.com/danielmartinezvigo/marina-tree/master/example3.png)
+![](https://raw.githubusercontent.com/danielmartinezvigo/marina-tree/master/marina-tree-3.svg)
 
 ```javascript
 const Marina = require('marina-tree');
 
-// Functions definition
+// Definition of more generic and reusable functions
 const myFuncs = {
-  isAnArray: (param) => {
-    return param instanceof Array;
+  gte: (singleFact, specificArg) => {
+    return singleFact[specificArg.field] >= specificArg.value;
   },
-  isANumber: (param) => {
-    return typeof param === 'number';
+  lte: (singleFact, specificArg) => {
+    return singleFact[specificArg.field] <= specificArg.value;
   },
-  isTrue: (param) => {
-    return param === true;
+  in: (singleFact, specificArg) => {
+    return specificArg.value.indexOf(singleFact[specificArg.field]) > -1;
   },
 };
 
@@ -142,87 +142,109 @@ const marina = new Marina(myFuncs, '*');
 
 // Build my conditions tree
 const myTree = {
-  funcs: ['*', '*'],
+  funcs: ['*', '*', '*'],
   facts: [
     {
-      funcs: ['isANumber', 'isAnArray'],
+      funcs: ['gte', 'lte'],
       operator: 'and',
     },
     {
-      funcs: ['isTrue', 'isTrue', 'isTrue'],
-      operator: 'xor',
+      funcs: ['*', 'in'],
+      facts: [
+        {
+          funcs: ['in', 'gte'],
+          operator: 'and',
+        },
+        null, // Padding
+      ],
+      operator: 'or',
+    },
+    {
+      funcs: ['in'],
+      operator: 'not',
     },
   ],
   operator: 'and',
 };
 
-const myNestedFact1 = [
+const nestedArgs = [
   [
-    1,
-    ['foo','bar'],
+    {
+      field: 'age',
+      value: 20,
+    },
+    {
+      field: 'age',
+      value: 80,
+    },
   ],
   [
-    false,
-    false,
-    false,
+    [
+      {
+        field: 'lang',
+        value: ['java', 'c++'],
+      },
+      {
+        field: 'exp',
+        value: 5,
+      },
+    ],
+    {
+      field: 'lang',
+      value: ['cobol'],
+    },
+  ],
+  [
+    {
+      field: 'lang',
+      value: ['php']
+    },
   ],
 ];
-console.log(marina.eval(myTree, myNestedFact1));  // false
 
-const myNestedFact2 = [
-  [
-    1,
-    ['foo','bar'],
-  ],
-  [
-    true,
-    false,
-    false,
-  ],
+const persons = [
+  {
+    age: 20,
+    lang: 'c++',
+    exp: 2,
+  },
+  {
+    age: 25,
+    lang: 'java',
+    exp: 5,
+  },
+  {
+    age: 60,
+    lang: 'cobol',
+    exp: 30,
+  },
+  {
+    age: 30,
+    lang: 'php',
+    exp: 10,
+  },
 ];
-console.log(marina.eval(myTree, myNestedFact2));  // true
 
-const myNestedFact3 = [
-  [
-    1,
-    ['foo','bar'],
-  ],
-  [
-    true,
-    true,
-    false,
-  ],
-];
-console.log(marina.eval(myTree, myNestedFact3));  // false
-
-const myNestedFact4 = [
-  [
-    1,
-    'foo bar',
-  ],
-  [
-    true,
-    false,
-    false,
-  ],
-];
-console.log(marina.eval(myTree, myNestedFact4));  // false
+console.log(marina.eval(myTree, persons[0], nestedArgs)); // false
+console.log(marina.eval(myTree, persons[1], nestedArgs)); // true
+console.log(marina.eval(myTree, persons[2], nestedArgs)); // true
+console.log(marina.eval(myTree, persons[3], nestedArgs)); // false
 ```
 
-Operators
------
+# Operators
+
 * and
 * nand
 * or
 * xor
-* not
-* none
-* ... (alias for none)
+* not (unary)
+* none (unary)
+* ... (alias for none) (unary)
 
-Marina
------
+# Marina
+
 ![Marina](https://raw.githubusercontent.com/danielmartinezvigo/marina-tree/master/logo.jpg)
 
-License
--------------
+# License
+
 MIT
